@@ -1,0 +1,18 @@
+{
+  "common": {
+    "connect_wallet": "Connect Wallet"
+  },
+
+  "games": {
+    "coinflip": "Coinflip",
+    "dices": "Dices",
+    "roulette": "Roulette"
+  },
+
+  "navigation": {
+    "leaderboard": "Leaderboard",
+    "bonuses": "Bonuses",
+    "referral": "Referral Program",
+    "support": "Support"
+  }
+}

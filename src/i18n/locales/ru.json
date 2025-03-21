@@ -1,0 +1,18 @@
+{
+  "common": {
+    "connect_wallet": "Подключить кошелёк"
+  },
+
+  "games": {
+    "coinflip": "Монетка",
+    "dices": "Дайсы",
+    "roulette": "Рулетка"
+  },
+
+  "navigation": {
+    "leaderboard": "Лидеры",
+    "bonuses": "Бонусы",
+    "referral": "Рефералка",
+    "support": "Поддержка"
+  }
+}
