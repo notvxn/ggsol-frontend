@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GGSOL - Игровая платформа</title>
+    <style>
+      :root {
+        --accent-primary: #6c46e8;
+        --accent-secondary: #8a6aff;
+        --dark-bg: #15131d;
+        --dark-bg-lighter: #1c1927;
+        --dark-border: #2d283e;
+        --text-light: #f0f0f0;
+        --text-muted: #9e9cb1;
+        --green: #4caf50;
+        --red: #f44336;
+        --space-xs: 4px;
+        --space-sm: 8px;
+        --space-md: 16px;
+        --space-lg: 24px;
+        --space-xl: 32px;
+        --space-xxl: 48px;
+        --radius-sm: 6px;
+        --radius-md: 12px;
+        --radius-lg: 18px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          'Inter',
+          system-ui,
+          -apple-system,
+          sans-serif;
+      }
+
+      body {
+        background-color: var(--dark-bg);
+        color: var(--text-light);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* Layout */
+      .layout {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 260px;
+        flex-shrink: 0;
+        background-color: var(--dark-bg-lighter);
+        border-right: 1px solid var(--dark-border);
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+      }
+
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+
+      /* Sidebar */
+      .sidebar__logo {
+        display: flex;
+        align-items: center;
+        padding: var(--space-xl);
+        border-bottom: 1px solid var(--dark-border);
+      }
+
+      .sidebar__logo-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: var(--space-md);
+      }
+
+      .sidebar__logo-text {
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      .sidebar__logo-text span {
+        color: var(--accent-primary);
+      }
+
+      .sidebar__nav {
+        padding: var(--space-lg) 0;
+      }
+
+      .sidebar__nav-item {
+        display: flex;
+        align-items: center;
+        padding: var(--space-md) var(--space-xl);
+        color: var(--text-light);
+        text-decoration: none;
+        font-size: 16px;
+        transition: all 0.2s ease;
+      }
+
+      .sidebar__nav-item:hover {
+        background-color: rgba(108, 70, 232, 0.1);
+      }
+
+      .sidebar__nav-item-icon {
+        width: 20px;
+        height: 20px;
+        margin-right: var(--space-md);
+        opacity: 0.8;
+      }
+
+      .sidebar__footer {
+        margin-top: auto;
+        padding: var(--space-xl);
+        border-top: 1px solid var(--dark-border);
+      }
+
+      .connect-wallet {
+        width: 100%;
+        padding: var(--space-md);
+        background-color: var(--accent-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .connect-wallet:hover {
+        background-color: var(--accent-secondary);
+      }
+
+      /* Header */
+      .header {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--space-xl);
+        border-bottom: 1px solid var(--dark-border);
+        position: sticky;
+        top: 0;
+        background-color: var(--dark-bg);
+        z-index: 100;
+      }
+
+      .header__nav {
+        display: flex;
+        gap: var(--space-xl);
+      }
+
+      .header__nav-link {
+        color: var(--text-light);
+        text-decoration: none;
+        font-size: 15px;
+        position: relative;
+      }
+
+      .header__nav-link:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: var(--accent-primary);
+        transition: width 0.2s ease;
+      }
+
+      .header__nav-link:hover:after,
+      .header__nav-link.active:after {
+        width: 100%;
+      }
+
+      .header__user {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+      }
+
+      .header__user-wager {
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: var(--space-xs) var(--space-md);
+        border-radius: 50px;
+        font-size: 14px;
+      }
+
+      /* Main Section */
+      .main-section {
+        flex: 1;
+        padding: var(--space-xl);
+        display: grid;
+        grid-template-columns: 1fr 300px;
+        gap: var(--space-xl);
+      }
+
+      /* Games Section */
+      .games-section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xl);
+      }
+
+      .section-title {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: var(--space-md);
+      }
+
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-xl);
+      }
+
+      .game-card {
+        background-color: var(--dark-bg-lighter);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--dark-border);
+        overflow: hidden;
+        transition: all 0.2s ease;
+        cursor: pointer;
+      }
+
+      .game-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .game-card__image {
+        height: 180px;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .game-card__info {
+        padding: var(--space-md);
+      }
+
+      .game-card__title {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: var(--space-xs);
+      }
+
+      .game-card__desc {
+        font-size: 14px;
+        color: var(--text-muted);
+      }
+
+      /* Leaderboard */
+      .leaderboard {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .leaderboard__card {
+        background-color: var(--dark-bg-lighter);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--dark-border);
+        overflow: hidden;
+      }
+
+      .leaderboard__header {
+        padding: var(--space-md);
+        border-bottom: 1px solid var(--dark-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .leaderboard__title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .leaderboard__period {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .leaderboard__list {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .leaderboard__item {
+        display: flex;
+        align-items: center;
+        padding: var(--space-md);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .leaderboard__item:last-child {
+        border-bottom: none;
+      }
+
+      .leaderboard__item-rank {
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        margin-right: var(--space-md);
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .leaderboard__item-rank.top-3 {
+        background-color: var(--accent-primary);
+      }
+
+      .leaderboard__item-info {
+        flex: 1;
+      }
+
+      .leaderboard__item-username {
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .leaderboard__item-address {
+        font-size: 12px;
+        color: var(--text-muted);
+      }
+
+      .leaderboard__item-wager {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      /* Chat */
+      .chat {
+        margin-top: var(--space-xl);
+        background-color: var(--dark-bg-lighter);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--dark-border);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 400px;
+      }
+
+      .chat__header {
+        padding: var(--space-md);
+        border-bottom: 1px solid var(--dark-border);
+      }
+
+      .chat__title {
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .chat__messages {
+        flex: 1;
+        padding: var(--space-md);
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+
+      .chat__message {
+        display: flex;
+        gap: var(--space-sm);
+      }
+
+      .chat__message-username {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .chat__message-text {
+        font-size: 14px;
+      }
+
+      .chat__input {
+        display: flex;
+        padding: var(--space-md);
+        border-top: 1px solid var(--dark-border);
+        gap: var(--space-md);
+      }
+
+      .chat__input input {
+        flex: 1;
+        padding: var(--space-md);
+        background-color: rgba(255, 255, 255, 0.05);
+        border: none;
+        border-radius: var(--radius-sm);
+        outline: none;
+        color: var(--text-light);
+      }
+
+      .chat__input button {
+        padding: var(--space-sm) var(--space-md);
+        background-color: var(--accent-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Game Simulator */
+      .game-simulator {
+        background-color: var(--dark-bg-lighter);
+        border-radius: var(--radius-md);
+        border: 1px solid var(--dark-border);
+        overflow: hidden;
+        margin-top: var(--space-xl);
+      }
+
+      .game-simulator__header {
+        padding: var(--space-md);
+        border-bottom: 1px solid var(--dark-border);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .game-simulator__content {
+        padding: var(--space-xl);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-xl);
+      }
+
+      .dice-container {
+        display: flex;
+        gap: var(--space-lg);
+      }
+
+      .dice {
+        width: 80px;
+        height: 80px;
+        background-color: white;
+        border-radius: var(--radius-sm);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: var(--dark-bg);
+      }
+
+      .game-controls {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        max-width: 400px;
+        gap: var(--space-md);
+      }
+
+      .bet-input {
+        display: flex;
+        gap: var(--space-md);
+      }
+
+      .bet-input input {
+        flex: 1;
+        padding: var(--space-md);
+        background-color: rgba(255, 255, 255, 0.05);
+        border: none;
+        border-radius: var(--radius-sm);
+        outline: none;
+        color: var(--text-light);
+      }
+
+      .roll-button {
+        padding: var(--space-md);
+        background-color: var(--accent-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-sm);
+        font-weight: 600;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .roll-button:hover {
+        background-color: var(--accent-secondary);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar__logo">
+          <svg class="sidebar__logo-icon" viewBox="0 0 24 24" fill="white">
+            <path d="M12 0C5.376 0 0 5.376 0 12s5.376 12 12 12 12-5.376 12-12S18.624 0 12 0zm0 19a7 7 0 100-14 7 7 0 000 14z" />
+          </svg>
+          <div class="sidebar__logo-text">GG<span>SOL</span></div>
+        </div>
+
+        <nav class="sidebar__nav">
+          <a href="#" class="sidebar__nav-item">
+            <svg class="sidebar__nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M4 17h2.5v2H4v-2zm3.5 0h2.5v2H7.5v-2zm3.5 0h2.5v2H11v-2zm3.5 0H17v2h-2.5v-2zm3.5 0h2v2h-2v-2zM4 14h2.5v2H4v-2zm3.5 0h2.5v2H7.5v-2zm3.5 0h2.5v2H11v-2zm3.5 0H17v2h-2.5v-2zm3.5 0h2v2h-2v-2zM4 11h2.5v2H4v-2zm3.5 0h2.5v2H7.5v-2zm3.5 0h2.5v2H11v-2zm3.5 0H17v2h-2.5v-2zm3.5 0h2v2h-2v-2zM4 8h2.5v2H4V8zm3.5 0h2.5v2H7.5V8zm3.5 0h2.5v2H11V8zm3.5 0H17v2h-2.5V8zm3.5 0h2v2h-2V8z"
+              />
+            </svg>
+            Дайсы
+          </a>
+          <a href="#" class="sidebar__nav-item">
+            <svg class="sidebar__nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+              <circle cx="12" cy="12" r="5" />
+            </svg>
+            Монетка
+          </a>
+          <a href="#" class="sidebar__nav-item">
+            <svg class="sidebar__nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+              <path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z" />
+            </svg>
+            Рулетка
+          </a>
+          <a href="#" class="sidebar__nav-item">
+            <svg class="sidebar__nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H7c-.55 0-1-.45-1-1V7c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1z" />
+              <path d="M10.92 8.21L8.38 9.49l.75 1.71 2.54-1.28-.75-1.71zm2.16 4.93l2.54-1.28-.75-1.71-2.54 1.28.75 1.71z" />
+            </svg>
+            Coinroll
+          </a>
+          <a href="#" class="sidebar__nav-item">
+            <svg class="sidebar__nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14l-6-6z" />
+            </svg>
+            История игр
+          </a>
+          <a href="#" class="sidebar__nav-item">
+            <svg class="sidebar__nav-item-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"
+              />
+            </svg>
+            Реферальная система
+          </a>
+        </nav>
+
+        <div class="sidebar__footer">
+          <button class="connect-wallet">Подключить кошелёк</button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <div class="main-content">
+        <header class="header">
+          <div class="header__nav">
+            <a href="#" class="header__nav-link active">Главная</a>
+            <a href="#" class="header__nav-link">Мои игры</a>
+            <a href="#" class="header__nav-link">Реферальная система</a>
+          </div>
+          <div class="header__user">
+            <div class="header__user-wager">Wager: 1,245 SOL</div>
+          </div>
+        </header>
+
+        <main class="main-section">
+          <div class="games-section">
+            <div>
+              <h2 class="section-title">Популярные игры</h2>
+              <div class="games-grid">
+                <div class="game-card">
+                  <div class="game-card__image">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent-primary)">
+                      <path
+                        d="M4 17h2.5v2H4v-2zm3.5 0h2.5v2H7.5v-2zm3.5 0h2.5v2H11v-2zm3.5 0H17v2h-2.5v-2zm3.5 0h2v2h-2v-2zM4 14h2.5v2H4v-2zm3.5 0h2.5v2H7.5v-2zm3.5 0h2.5v2H11v-2zm3.5 0H17v2h-2.5v-2zm3.5 0h2v2h-2v-2zM4 11h2.5v2H4v-2zm3.5 0h2.5v2H7.5v-2zm3.5 0h2.5v2H11v-2zm3.5 0H17v2h-2.5v-2zm3.5 0h2v2h-2v-2zM4 8h2.5v2H4V8zm3.5 0h2.5v2H7.5V8zm3.5 0h2.5v2H11V8zm3.5 0H17v2h-2.5V8zm3.5 0h2v2h-2V8z"
+                      />
+                    </svg>
+                  </div>
+                  <div class="game-card__info">
+                    <h3 class="game-card__title">Дайсы</h3>
+                    <p class="game-card__desc">Классическая игра в кости с возможностью выиграть до x5</p>
+                  </div>
+                </div>
+                <div class="game-card">
+                  <div class="game-card__image">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent-primary)">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                      <circle cx="12" cy="12" r="5" />
+                    </svg>
+                  </div>
+                  <div class="game-card__info">
+                    <h3 class="game-card__title">Монетка</h3>
+                    <p class="game-card__desc">Простая игра с шансом 50/50. Угадай сторону монеты</p>
+                  </div>
+                </div>
+                <div class="game-card">
+                  <div class="game-card__image">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent-primary)">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+                      <path d="M13 7h-2v5.414l3.293 3.293 1.414-1.414L13 11.586z" />
+                    </svg>
+                  </div>
+                  <div class="game-card__info">
+                    <h3 class="game-card__title">Рулетка</h3>
+                    <p class="game-card__desc">Классическая рулетка с красным, черным и зеленым</p>
+                  </div>
+                </div>
+                <div class="game-card">
+                  <div class="game-card__image">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--accent-primary)">
+                      <path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-1 14H7c-.55 0-1-.45-1-1V7c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1z" />
+                      <path d="M10.92 8.21L8.38 9.49l.75 1.71 2.54-1.28-.75-1.71zm2.16 4.93l2.54-1.28-.75-1.71-2.54 1.28.75 1.71z" />
+                    </svg>
+                  </div>
+                  <div class="game-card__info">
+                    <h3 class="game-card__title">Coinroll</h3>
+                    <p class="game-card__desc">Игра с многоуровневыми ставками до x100</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Game Simulator (Dice Example) -->
+            <div class="game-simulator">
+              <div class="game-simulator__header">
+                <h3 class="game-simulator__title">Дайсы</h3>
+              </div>
+              <div class="game-simulator__content">
+                <div class="dice-container">
+                  <div class="dice">4</div>
+                  <div class="dice">6</div>
+                </div>
+                <div class="game-controls">
+                  <div class="bet-input">
+                    <input type="number" placeholder="Сумма ставки" value="0.1" />
+                    <span>SOL</span>
+                  </div>
+                  <button class="roll-button">Бросить кости</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="sidebar-widgets">
+            <!-- Leaderboard Widget -->
+            <div class="leaderboard">
+              <div class="leaderboard__card">
+                <div class="leaderboard__header">
+                  <div class="leaderboard__title">Топ недели</div>
+                  <div class="leaderboard__period">10.03 - 16.03</div>
+                </div>
+                <div class="leaderboard__list">
+                  <div class="leaderboard__item">
+                    <div class="leaderboard__item-rank top-3">1</div>
+                    <div class="leaderboard__item-info">
+                      <div class="leaderboard__item-username">cryptoKing</div>
+                      <div class="leaderboard__item-address">sol...j29k</div>
+                    </div>
+                    <div class="leaderboard__item-wager">245.8 SOL</div>
+                  </div>
+                  <div class="leaderboard__item">
+                    <div class="leaderboard__item-rank top-3">2</div>
+                    <div class="leaderboard__item-info">
+                      <div class="leaderboard__item-username">luckyPlayer</div>
+                      <div class="leaderboard__item-address">sol...f73p</div>
+                    </div>
+                    <div class="leaderboard__item-wager">187.2 SOL</div>
+                  </div>
+                  <div class="leaderboard__item">
+                    <div class="leaderboard__item-rank top-3">3</div>
+                    <div class="leaderboard__item-info">
+                      <div class="leaderboard__item-username">gambler123</div>
+                      <div class="leaderboard__item-address">sol...h54s</div>
+                    </div>
+                    <div class="leaderboard__item-wager">145.9 SOL</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  </body>
+</html>

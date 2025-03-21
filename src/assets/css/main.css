@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --iris-50-light: #fdfdff;
+  --iris-100-light: #f8f8ff;
+  --iris-200-light: #f0f1fe;
+  --iris-300-light: #e6e7ff;
+  --iris-400-light: #dadcff;
+  --iris-500-light: #cbcdff;
+  --iris-600-light: #b8baf8;
+  --iris-700-light: #9b9ef0;
+  --iris-800-light: #5b5bd6;
+  --iris-900-light: #5151cd;
+  --iris-950-light: #272962;
+
+  --iris-50-dark: #e0dffe;
+  --iris-100-dark: #b1a9ff;
+  --iris-200-dark: #6e6ade;
+  --iris-300-dark: #5b5bd6;
+  --iris-400-dark: #5958b1;
+  --iris-500-dark: #4a4a95;
+  --iris-600-dark: #3d3e82;
+  --iris-700-dark: #303374;
+  --iris-800-dark: #262a65;
+  --iris-900-dark: #202248;
+  --iris-950-dark: #13131e;
+
+  --color-accent-50: var(--iris-50-light);
+  --color-accent-100: var(--iris-100-light);
+  --color-accent-200: var(--iris-200-light);
+  --color-accent-300: var(--iris-300-light);
+  --color-accent-400: var(--iris-400-light);
+  --color-accent-500: var(--iris-500-light);
+  --color-accent-600: var(--iris-600-light);
+  --color-accent-700: var(--iris-700-light);
+  --color-accent-800: var(--iris-800-light);
+  --color-accent-900: var(--iris-900-light);
+  --color-accent-950: var(--iris-950-light);
+
+  --font-sans: 'Tektur', sans-serif;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    color: var(--color-accent-50);
+    background-color: var(--color-accent-950);
+  }
+}
+
+/* @supports (color: color(display-p3 1 1 1)) {
+  @media (color-gamut: p3) {
+    @theme {
+      --iris-50-light: color(display-p3 0.992 0.992 0.999);
+      --iris-100-light: color(display-p3 0.972 0.973 0.998);
+      --iris-200-light: color(display-p3 0.943 0.945 0.992);
+      --iris-300-light: color(display-p3 0.902 0.906 1);
+      --iris-400-light: color(display-p3 0.857 0.861 1);
+      --iris-500-light: color(display-p3 0.799 0.805 0.987);
+      --iris-600-light: color(display-p3 0.721 0.727 0.955);
+      --iris-700-light: color(display-p3 0.61 0.619 0.918);
+      --iris-800-light: color(display-p3 0.357 0.357 0.81);
+      --iris-900-light: color(display-p3 0.318 0.318 0.774);
+      --iris-950-light: color(display-p3 0.154 0.161 0.371);
+    }
+  }
+} */
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-accent-50: var(--iris-50-dark);
+    --color-accent-100: var(--iris-100-dark);
+    --color-accent-200: var(--iris-200-dark);
+    --color-accent-300: var(--iris-300-dark);
+    --color-accent-400: var(--iris-400-dark);
+    --color-accent-500: var(--iris-500-dark);
+    --color-accent-600: var(--iris-600-dark);
+    --color-accent-700: var(--iris-700-dark);
+    --color-accent-800: var(--iris-800-dark);
+    --color-accent-900: var(--iris-900-dark);
+    --color-accent-950: var(--iris-950-dark);
+  }
+
+  /* @supports (color: color(display-p3 1 1 1)) {
+    @media (color-gamut: p3) {
+      @theme {
+        --iris-50-dark: color(display-p3 0.878 0.875 0.986);
+        --iris-100-dark: color(display-p3 0.685 0.662 1);
+        --iris-200-dark: color(display-p3 0.428 0.416 0.843);
+        --iris-300-dark: color(display-p3 0.357 0.357 0.81);
+        --iris-400-dark: color(display-p3 0.35 0.345 0.673);
+        --iris-500-dark: color(display-p3 0.291 0.289 0.565);
+        --iris-600-dark: color(display-p3 0.239 0.241 0.491);
+        --iris-700-dark: color(display-p3 0.192 0.201 0.44);
+        --iris-800-dark: color(display-p3 0.153 0.165 0.382);
+        --iris-900-dark: color(display-p3 0.128 0.134 0.272);
+        --iris-950-dark: color(display-p3 0.075 0.075 0.114);
+      }
+    }
+  } */
+}

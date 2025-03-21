@@ -1,0 +1,1 @@
+export { default as CoinflipPage } from './CoinflipPage.vue'

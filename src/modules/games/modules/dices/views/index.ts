@@ -1,0 +1,1 @@
+export { default as DicesPage } from './DicesPage.vue'
